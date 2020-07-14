@@ -1,7 +1,7 @@
 dictionary = ["below", "down", "go", "going", "horn", "how", "howdy", "it", "i", "low", "own", "part", "partner", "sit"]
 
 def substrings(string, dictionary)
-  hash = string.split.reduce(Hash.new(0)) do |hash, word|
+  string.split.reduce(Hash.new(0)) do |hash, word|
     word.gsub(/\W/,'').downcase!
     dictionary.each do |n|
       if word.include? n
