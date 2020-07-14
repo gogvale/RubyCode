@@ -1,6 +1,6 @@
 def bubble_sort(arr)
   last_idx = arr.length - 1
-  while (last_idx >= 0)
+  while (last_idx > 0)
     arr.each_with_index do |i, idx|
       if idx == last_idx
         break
