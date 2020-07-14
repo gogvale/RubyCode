@@ -2,7 +2,7 @@ def bubble_sort(arr)
   last_idx = arr.length - 1
   while (last_idx > 0)
     swaped = false
-    0.upto(last_idx-1).each do |idx|
+    0.upto(last_idx - 1).each do |idx|
       if arr[idx] > arr[idx + 1]
         arr[idx], arr[idx + 1] = arr[idx + 1], arr[idx]
         swaped = true
