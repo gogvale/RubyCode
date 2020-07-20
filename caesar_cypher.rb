@@ -1,14 +1,12 @@
-$a, $z, $A, $Z = "azAZ".bytes #[97, 122, 65, 90]
+$a, $z, $A, $Z = 'azAZ'.bytes # [97, 122, 65, 90]
 $alphabet = ($a..$z).to_a + ($A..$Z).to_a
 
 def replace_char(char, shift)
   char_ascii = char.ord
 
-  if (shift == 0 or !$alphabet.include?(char_ascii))
-    return char
-  end
+  return char if (shift == 0) || !$alphabet.include?(char_ascii)
 
-  if shift > 0
+  if shift.positive?
     if char_ascii == $z
       char_ascii = $a
     elsif char_ascii == $Z
@@ -17,7 +15,7 @@ def replace_char(char, shift)
       char_ascii += 1
     end
     shift -= 1
-  elsif shift < 0
+  elsif shift.negative?
     if char_ascii == $a
       char_ascii = $z
     elsif char_ascii == $A
@@ -30,10 +28,10 @@ def replace_char(char, shift)
 
   new_char = char_ascii.chr
 
-  return replace_char(new_char, shift)
+  replace_char(new_char, shift)
 end
 
 def caesar_cipher(string, shift)
   shift %= 26
-  return string.split("").map { |char| replace_char(char, shift) }.join
+  string.split('').map { |char| replace_char(char, shift) }.join
 end
