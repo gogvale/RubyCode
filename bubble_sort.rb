@@ -1,6 +1,6 @@
 def bubble_sort(arr)
   last_idx = arr.length - 1
-  while (last_idx > 0)
+  while last_idx.positive?
     swaped = false
     0.upto(last_idx - 1).each do |idx|
       if arr[idx] > arr[idx + 1]
@@ -8,12 +8,11 @@ def bubble_sort(arr)
         swaped = true
       end
     end
-    if not swaped
-      break
-    end
+    break unless swaped
+
     last_idx -= 1
   end
-  return arr
+  arr
 end
 
 bubble_sort([4, 3, 78, 2, 0, 2])
