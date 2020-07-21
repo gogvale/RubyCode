@@ -7,45 +7,35 @@ class Mastermind
     # set_game_mode
   end
 
-  def self.test
-    puts 'I am now red'.red
-  end
-
   def reset
     @secret = random_input
     @answer = []
-    @turns_left = 12
+    @turns = 0
   end
 
   def start
-    prompt_user until guessed_correctly? || @turns_left.negative?
-    if @turns_left.positive?
-      puts "You have guessed the secret with #{@turns_left} turns left, HOORAY!!"
-    else
-      puts 'Game Over. Better luck next time…'
-    end
+    prompt_user until guessed_correctly?
+    puts "You have guessed the secret in #{@turns} turns!"
     print 'Answer: '
     print_secret
   end
 
-  # private
+  private
 
-  def computer_guess; end
+  def computer_guess
+    # TODO: implement algorithm to guess user answer
+  end
 
   def user_guessing?
+    # TODO: select computer_guess mode
     true
   end
 
-  def generate_secret
-    @secret.clear
-    4.times do
-      @secret << @peg_colors.keys.sample
-    end
-  end
-
   def guessed_correctly?
-    return true if @answer == @secret
     return false if @answer.empty?
+
+    @turns += 1
+    return true if @answer == @secret
 
     validation_array = []
     @answer.each_with_index do |ans, idx|
@@ -80,13 +70,12 @@ class Mastermind
       answer = gets.chomp.split('').map(&:to_sym)
     end
     @answer = answer
-    @turns_left -= 1
   end
 
   def set_secret
     input = []
     until valid_input? input
-      p @peg_colors
+      print_options
       print "Please, set the answer (eg. 'rbgy'):"
       input = gets.chomp.split('').map(&:to_sym)
     end
@@ -97,9 +86,8 @@ class Mastermind
     if user_guessing?
       start
     else
-      @turns_left = 5
       set_secret
-      computer_guess until guessed_correctly? || @turns_left.zero?
+      computer_guess until guessed_correctly?
     end
   end
 
