@@ -4,13 +4,25 @@ class Mastermind
   def initialize
     @peg_colors = { r: :light_red, b: :light_blue, y: :yellow, g: :green, w: :white, p: :magenta }
     reset
-    # set_game_mode
+    set_game_mode
   end
 
   def reset
     @secret = random_input
     @answer = []
     @turns = 0
+  end
+
+  def set_game_mode
+    if user_guessing?
+      start
+    else
+      set_secret
+      computer_guess until guessed_correctly?
+      puts "The PC took #{@turns} turns to guess your code (it's still learning)"
+      print 'Answer: '
+      print_secret
+    end
   end
 
   def start
@@ -23,12 +35,23 @@ class Mastermind
   private
 
   def computer_guess
+    @answer = random_input
     # TODO: implement algorithm to guess user answer
   end
 
   def user_guessing?
-    # TODO: select computer_guess mode
-    true
+    puts 'Select option:'
+    puts '1) Crack the code'
+    puts '2) Set the code'
+    print '>>>'
+    ans = gets.chomp.to_i
+    if ans == 1
+      true
+    elsif ans == 2
+      false
+    else
+      user_guessing?
+    end
   end
 
   def guessed_correctly?
@@ -80,15 +103,6 @@ class Mastermind
       input = gets.chomp.split('').map(&:to_sym)
     end
     @answer = input
-  end
-
-  def set_game_mode
-    if user_guessing?
-      start
-    else
-      set_secret
-      computer_guess until guessed_correctly?
-    end
   end
 
   def random_input
