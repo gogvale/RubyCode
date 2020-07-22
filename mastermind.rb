@@ -1,5 +1,4 @@
 require 'colorize'
-require 'pry'
 
 class Mastermind
   def initialize
@@ -134,3 +133,5 @@ class Mastermind
     arr.uniq.length == 4 && arr.all? { |i| @peg_colors.keys.include? i }
   end
 end
+
+Mastermind.new.start_game
