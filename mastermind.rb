@@ -8,6 +8,7 @@ class Mastermind
 
   def reset
     @answer = []
+    @secret = random_input
     @turns = 0
     @pc_correct = {}
     @pc_right = []
@@ -17,7 +18,6 @@ class Mastermind
   def start_game
     reset
     if user_guessing?
-      @secret = random_input
       prompt_user until guessed_correctly?
       puts "You have guessed the secret in #{@turns} turns!"
     else
@@ -67,6 +67,7 @@ class Mastermind
                             ans.to_s.colorize(:light_red)
                           end
     end
+    puts validation_array.join
     false
   end
 
