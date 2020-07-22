@@ -1,10 +1,9 @@
 require 'colorize'
+require 'pry'
 
 class Mastermind
   def initialize
     @peg_colors = { r: :light_red, b: :light_blue, y: :yellow, g: :green, w: :white, p: :magenta }
-    reset
-    set_game_mode
   end
 
   def reset
@@ -16,21 +15,16 @@ class Mastermind
     @pc_wrong = []
   end
 
-  def set_game_mode
+  def start_game
+    reset
     if user_guessing?
-      start
+      prompt_user until guessed_correctly?
+      puts "You have guessed the secret in #{@turns} turns!"
     else
       set_secret
       computer_guess until guessed_correctly?
       puts "The PC took #{@turns} turns to guess your code (it's still learning)"
-      print 'Answer: '
-      print_secret
     end
-  end
-
-  def start
-    prompt_user until guessed_correctly?
-    puts "You have guessed the secret in #{@turns} turns!"
     print 'Answer: '
     print_secret
   end
@@ -39,7 +33,13 @@ class Mastermind
 
   def add_correct(idx, ans)
     @pc_correct[idx] = ans
-    @pc_right -= @pc_correct.keys
+    @pc_right -= @pc_correct.values
+  end
+
+  def add_right(ans)
+    unless @pc_right.include? ans
+      @pc_right << ans unless @pc_correct.values.include? ans
+    end
   end
 
   def computer_guess
@@ -71,17 +71,16 @@ class Mastermind
     validation_array = []
     @answer.each_with_index do |ans, idx|
       validation_array << if ans == @secret[idx]
-                            add_correct(idx, ans)
+                            add_correct(idx, ans) if @pc_correct[idx].nil?
                             ans.to_s.colorize(:green)
                           elsif @secret.include? ans
-                            @pc_right << ans
+                            add_right(ans)
                             ans.to_s.colorize(:yellow)
                           else
-                            @pc_wrong << ans
+                            @pc_wrong << ans unless @pc_wrong.include? ans
                             ans.to_s.colorize(:light_red)
                           end
     end
-    puts validation_array.join
     false
   end
 
