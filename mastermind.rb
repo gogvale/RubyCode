@@ -11,6 +11,9 @@ class Mastermind
     @secret = random_input
     @answer = []
     @turns = 0
+    @pc_correct = {}
+    @pc_right = []
+    @pc_wrong = []
   end
 
   def set_game_mode
@@ -33,6 +36,11 @@ class Mastermind
   end
 
   private
+
+  def add_correct(idx, ans)
+    @pc_correct[idx] = ans
+    @pc_right -= @pc_correct.keys
+  end
 
   def computer_guess
     @answer = random_input
@@ -63,10 +71,13 @@ class Mastermind
     validation_array = []
     @answer.each_with_index do |ans, idx|
       validation_array << if ans == @secret[idx]
+                            add_correct(idx, ans)
                             ans.to_s.colorize(:green)
                           elsif @secret.include? ans
+                            @pc_right << ans
                             ans.to_s.colorize(:yellow)
                           else
+                            @pc_wrong << ans
                             ans.to_s.colorize(:light_red)
                           end
     end
