@@ -7,7 +7,6 @@ class Mastermind
   end
 
   def reset
-    @secret = random_input
     @answer = []
     @turns = 0
     @pc_correct = {}
@@ -18,6 +17,7 @@ class Mastermind
   def start_game
     reset
     if user_guessing?
+      @secret = random_input
       prompt_user until guessed_correctly?
       puts "You have guessed the secret in #{@turns} turns!"
     else
@@ -44,22 +44,8 @@ class Mastermind
 
   def computer_guess
     @answer = random_input
+    set_answer if @pc_correct.length == @secret.length
     # TODO: implement algorithm to guess user answer
-  end
-
-  def user_guessing?
-    puts 'Select option:'
-    puts '1) Crack the code'
-    puts '2) Set the code'
-    print '>>>'
-    ans = gets.chomp.to_i
-    if ans == 1
-      true
-    elsif ans == 2
-      false
-    else
-      user_guessing?
-    end
   end
 
   def guessed_correctly?
@@ -105,6 +91,19 @@ class Mastermind
     @answer = answer
   end
 
+  def random_input
+    input = []
+    while input.length < 4
+      sample = @peg_colors.keys.sample
+      input << sample unless input.include? sample
+    end
+    input
+  end
+
+  def set_answer
+    @pc_correct.each_pair { |index, color| @answer[index] = color }
+  end
+
   def set_secret
     input = []
     until valid_input? input
@@ -115,13 +114,19 @@ class Mastermind
     @answer = input
   end
 
-  def random_input
-    input = []
-    while input.length < 4
-      sample = @peg_colors.keys.sample
-      input << sample unless input.include? sample
+  def user_guessing?
+    puts 'Select option:'
+    puts '1) Crack the code'
+    puts '2) Set the code'
+    print '>>>'
+    ans = gets.chomp.to_i
+    if ans == 1
+      true
+    elsif ans == 2
+      false
+    else
+      user_guessing?
     end
-    input
   end
 
   def valid_input?(arr)
