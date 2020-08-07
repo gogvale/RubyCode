@@ -1,9 +1,13 @@
 class Board
+  attr_accessor :squares
   def initialize
     @squares = { a: [nil, nil, nil], b: [nil, nil, nil], c: [nil, nil, nil] }
     @turn = 'X'
     @winner = nil
     @game_over = false
+  end
+
+  def start_game
     prompt_user until @game_over
   end
 
@@ -12,6 +16,7 @@ class Board
     print 'Give me the coordinates (eg. A0):'
     coords = gets.chomp.split('')
     mark_board(coords[0], coords[1].to_i)
+    check_for_winner
   end
 
   def print_row(array)
@@ -26,6 +31,9 @@ class Board
     else
       puts 'Sorry, this position is already taken. Try again'
     end
+  end
+
+  def check_for_winner
     if theres_a_winner?
       print_board
       @game_over = true
@@ -90,4 +98,4 @@ class Board
   end
 end
 
-game = Board.new
+# Board.new.start_game
